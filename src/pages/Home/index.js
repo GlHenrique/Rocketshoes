@@ -1,39 +1,56 @@
 import React, { Component } from "react";
-import { ProductList } from './styles';
-import { tenisNike } from './utils.js'
+import { connect } from 'react-redux';
+import { ProductList } from "./styles";
 import { MdAddShoppingCart } from "react-icons/all";
-import api from '../../services/api';
+import api from "../../services/api";
+import { formatPrice } from "../../utils/format";
 
-export default class Home extends Component {
+class Home extends Component {
     state = {
         products: []
-    }
+    };
 
     async componentDidMount() {
         const response = await api.get(`products`);
-        this.setState({ products: response.data });
+        const data = response.data.map(product => ({
+            ...product,
+            priceFormatted: formatPrice(product.price)
+        }))
+        this.setState({ products: data });
     }
-    render() {
 
+
+    handleAddProduct = product => {
+        const { dispatch }  = this.props;
+        dispatch({
+            type: 'ADD_TO_CART',
+            product,
+        })
+    }
+
+
+    render() {
         const { products } = this.state;
 
         return (
             <ProductList>
                 {products.map(product => (
                     <li key={product.id}>
-                    <img alt={product.title} src={product.image} />
-                    <strong>Tênis muito legal</strong>
-                    <span>R$ 129.90</span>
+                        <img alt={product.title} src={product.image} />
+                        <strong>{product.title}</strong>
+                        <span>{product.priceFormatted}</span>
 
-                    <button type="button">
-                        <div>
-                            <MdAddShoppingCart color="#FFF" size={16} /> 3
-                        </div>
-                        <span>ADICIONAR AO CARRINHO</span>
-                    </button>
-                </li>
+                        <button type="button" onClick={() => this.handleAddProduct(product)}>
+                            <div>
+                                <MdAddShoppingCart color="#FFF" size={16} /> 3
+                            </div>
+                            <span>ADICIONAR AO CARRINHO</span>
+                        </button>
+                    </li>
                 ))}
             </ProductList>
-        )
+        );
     }
 }
+
+export default connect()(Home);
