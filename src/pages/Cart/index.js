@@ -1,44 +1,53 @@
-import React from 'react'
-import {
-    Container,
-    ProductTable,
-    Total
-} from './styles';
-import { tenisNike } from '../Home/utils';
+import React from "react";
+import { Container, ProductTable, Total } from "./styles";
 import {
     MdRemoveCircleOutline,
     MdAddCircleOutline,
     MdDelete
-} from 'react-icons/md';
+} from "react-icons/md";
+import { connect } from "react-redux";
 
-export default function Cart() {
+function Cart({cart, dispatch}) {
     return (
         <Container>
             <ProductTable>
                 <thead>
-                    <tr>
-                        <th />
-                        <th>PRODUTO</th>
-                        <th>QTD</th>
-                        <th>SUBTOTAL</th>
-                        <th />
-                    </tr>
+                <tr>
+                    <th/>
+                    <th>PRODUTO</th>
+                    <th>QTD</th>
+                    <th>SUBTOTAL</th>
+                    <th/>
+                </tr>
                 </thead>
                 <tbody>
+                {cart.map(product => (
                     <tr>
-                        <td><img src={tenisNike} alt="Tênis Nike" /></td>
                         <td>
-                            <strong>Tênis muito bruto </strong>
-                            <span>R$ 129,90</span>
+                            <img src={product.image} alt={product.title}/>
+                        </td>
+                        <td>
+                            <strong>{product.title}</strong>
+                            <span>{product.priceFormatted}</span>
                         </td>
                         <td>
                             <div>
                                 <button type="button">
-                                    <MdRemoveCircleOutline color="#7159C1" size={20} />
+                                    <MdRemoveCircleOutline
+                                        color="#7159C1"
+                                        size={20}
+                                    />
                                 </button>
-                                <input type="number" readOnly value={2} />
+                                <input
+                                    type="number"
+                                    readOnly
+                                    value={product.amount}
+                                />
                                 <button type="button">
-                                    <MdAddCircleOutline color="#7159C1" size={20} />
+                                    <MdAddCircleOutline
+                                        color="#7159C1"
+                                        size={20}
+                                    />
                                 </button>
                             </div>
                         </td>
@@ -46,11 +55,20 @@ export default function Cart() {
                             <strong>R$258,80</strong>
                         </td>
                         <td>
-                            <button type="button">
-                                <MdDelete size={20} color="#7159C1" />
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    dispatch({
+                                        type: "REMOVE_FROM_CART",
+                                        id: product.id
+                                    })
+                                }
+                            >
+                                <MdDelete size={20} color="#7159C1"/>
                             </button>
                         </td>
                     </tr>
+                ))}
                 </tbody>
             </ProductTable>
             <footer>
@@ -61,5 +79,11 @@ export default function Cart() {
                 </Total>
             </footer>
         </Container>
-    )
+    );
 }
+
+const mapStateToProps = state => ({
+    cart: state.cart
+});
+
+export default connect(mapStateToProps)(Cart);

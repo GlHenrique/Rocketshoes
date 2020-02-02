@@ -15,13 +15,13 @@ class Home extends Component {
         const data = response.data.map(product => ({
             ...product,
             priceFormatted: formatPrice(product.price)
-        }))
-        this.setState({ products: data });
+        }));
+        this.setState({products: data});
     }
 
 
     handleAddProduct = product => {
-        const { dispatch }  = this.props;
+        const {dispatch} = this.props;
         dispatch({
             type: 'ADD_TO_CART',
             product,
@@ -30,19 +30,19 @@ class Home extends Component {
 
 
     render() {
-        const { products } = this.state;
+        const {products} = this.state;
 
         return (
             <ProductList>
                 {products.map(product => (
                     <li key={product.id}>
-                        <img alt={product.title} src={product.image} />
+                        <img alt={product.title} src={product.image}/>
                         <strong>{product.title}</strong>
                         <span>{product.priceFormatted}</span>
 
                         <button type="button" onClick={() => this.handleAddProduct(product)}>
                             <div>
-                                <MdAddShoppingCart color="#FFF" size={16} /> 3
+                                <MdAddShoppingCart color="#FFF" size={16}/> 3
                             </div>
                             <span>ADICIONAR AO CARRINHO</span>
                         </button>
