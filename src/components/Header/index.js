@@ -9,7 +9,6 @@ import { MdShoppingBasket } from 'react-icons/md';
 import { connect } from 'react-redux';
 
 function Header({cartSize}) {
-    console.log(cartSize);
     return (
         <Container>
             <Link to='/'>
