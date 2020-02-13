@@ -36,13 +36,13 @@ class Home extends Component {
             <ProductList>
                 {products.map(product => (
                     <li key={product.id}>
-                        <img alt={product.title} src={product.image}/>
+                        <img alt={product.title} src={product.image} />
                         <strong>{product.title}</strong>
                         <span>{product.priceFormatted}</span>
 
                         <button type="button" onClick={() => this.handleAddProduct(product.id)}>
                             <div>
-                                <MdAddShoppingCart color="#FFF" size={16}/>
+                                <MdAddShoppingCart color="#FFF" size={16} />
                                 {' '} {amount[product.id] || 0}
                             </div>
                             <span>ADICIONAR AO CARRINHO</span>
